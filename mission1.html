@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Escape Room - Misión 1: ¿Qué hay en mi bolsa de playa?</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #E0F7FA; padding: 30px;}
+    h2 { color: #039be5;}
+    .items, .words { display: flex; gap: 25px; margin-bottom: 30px;}
+    .item, .word { 
+      padding: 10px; 
+      border: 2px solid #039be5; 
+      border-radius: 12px; 
+      background: #fff;
+      min-width: 80px;
+      text-align: center;
+      transition: box-shadow 0.2s;
+    }
+    .item img { width: 60px; height: 60px;}
+    .matched { background: #A5D6A7; border-color: #388e3c;}
+    #result { font-size: 1.2em; color: #388e3c; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Misión 1: ¿Qué hay en mi bolsa de playa?</h2>
+  <p>Arrastra la palabra en español al objeto correcto. (¡Haz clic primero en la palabra y luego en el objeto!)</p>
+  
+  <div class="words">
+    <div class="word" draggable="true" id="word1">gafas de sol</div>
+    <div class="word" draggable="true" id="word2">toalla</div>
+    <div class="word" draggable="true" id="word3">crema solar</div>
+    <div class="word" draggable="true" id="word4">sombrero</div>
+  </div>
+
+  <div class="items">
+    <div class="item" id="item1" data-word="gafas de sol"><img src="https://cdn.pixabay.com/photo/2013/07/13/13/36/sunglasses-160601_1280.png" alt="gafas de sol"></div>
+    <div class="item" id="item2" data-word="toalla"><img src="https://cdn.pixabay.com/photo/2016/03/31/15/08/towel-1299911_1280.png" alt="toalla"></div>
+    <div class="item" id="item3" data-word="crema solar"><img src="https://cdn.pixabay.com/photo/2017/01/31/20/15/sunscreen-2020872_1280.png" alt="crema solar"></div>
+    <div class="item" id="item4" data-word="sombrero"><img src="https://cdn.pixabay.com/photo/2012/04/13/15/36/hat-32618_1280.png" alt="sombrero"></div>
+  </div>
+
+  <div id="result"></div>
+
+  <script>
+    let selectedWord = null;
+    const words = document.querySelectorAll('.word');
+    const items = document.querySelectorAll('.item');
+    let matched = 0;
+
+    // Select word to match
+    words.forEach(word => {
+      word.addEventListener('click', function() {
+        words.forEach(w => w.style.boxShadow = "none");
+        selectedWord = word;
+        word.style.boxShadow = "0 0 10px #0288d1";
+      });
+    });
+
+    // Match word to item
+    items.forEach(item => {
+      item.addEventListener('click', function() {
+        if (selectedWord && !item.classList.contains('matched')) {
+          if (selectedWord.textContent === item.dataset.word) {
+            item.classList.add('matched');
+            item.appendChild(document.createElement('br'));
+            item.appendChild(document.createTextNode(selectedWord.textContent));
+            selectedWord.style.visibility = 'hidden';
+            matched++;
+            if (matched === items.length) {
+              document.getElementById('result').textContent = "¡Muy bien! Has preparado tu bolsa de playa. 🌞";
+            }
+          } else {
+            item.style.boxShadow = "0 0 8px red";
+            setTimeout(()=>{item.style.boxShadow = "none"}, 600);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
